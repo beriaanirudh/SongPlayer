@@ -1,7 +1,9 @@
 package com.example.beriaa.songplayer;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,21 +16,24 @@ import java.net.URLEncoder;
 /**
  * Created by beriaa on 12/7/14.
  */
-public class getSongList extends AsyncTask<String, Void, String> {
+public class GetSongList extends AsyncTask<String, Void, String> {
 
     TextView textView;
     String retString = "";
+    boolean refreshFlag = false;
+    Context context;
     @Override
     protected String doInBackground(String... strings) {
         try {
-            downloadUrl("http://raspberrypi:8080/?getList=True");
+            downloadUrl("http://192.168.1.118:8080/?getList=True");
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public getSongList(TextView tView){
+    public GetSongList(TextView tView, Context context){
+        this.context = context;
         this.textView = tView;
     }
 
@@ -36,10 +41,11 @@ public class getSongList extends AsyncTask<String, Void, String> {
 
     private String downloadUrl(String myurl) throws IOException {
         InputStream is = null;
-
+        int responseCode = 0;
 
 
         int len = 500;
+
 
         try {
             URL url = new URL(myurl);
@@ -49,11 +55,20 @@ public class getSongList extends AsyncTask<String, Void, String> {
             conn.setRequestMethod("GET");
 
             conn.connect();
+            responseCode = conn.getResponseCode();
             is = conn.getInputStream();
+
+            System.out.println(responseCode + " is response code");
             BufferedReader bfReader = new BufferedReader(new InputStreamReader(is));
             String inputLine;
             System.out.println("PRINTING THE LIST\n\n");
+            //This boolean flag is hack to remove response-header
+            boolean removeHeader = false;
             while((inputLine = bfReader.readLine()) != null) {
+//                if (!removeHeader) {
+//                    removeHeader = true;
+//                    //continue;
+//                }
                 System.out.println(inputLine);
                 retString += inputLine;
                 retString += "\n";
@@ -62,6 +77,9 @@ public class getSongList extends AsyncTask<String, Void, String> {
             if (is != null) {
                 is.close();
                 System.out.println("cloding the connection");
+                if (responseCode == 200) {
+                    refreshFlag = true;
+                }
             }
         }
         return retString;
@@ -69,6 +87,10 @@ public class getSongList extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String str){
         //textView.setText(retString);
+        if (!refreshFlag) {
+            Toast.makeText(context, "Couldnt' connect...",
+                    Toast.LENGTH_LONG).show();
+        }
         textView.setText(retString.replace("\\n", "\n"));
 
     }

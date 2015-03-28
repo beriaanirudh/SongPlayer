@@ -1,6 +1,9 @@
 package com.example.beriaa.songplayer;
 
+import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +19,8 @@ import java.net.URL;
  */
 public class PlayControl extends AsyncTask <String, Void, String> {
     String control = "";
+    public String toastMessage = "Can't reach server...";
+    Context context;
     @Override
     protected String doInBackground(String... strings) {
         try {
@@ -25,11 +30,14 @@ public class PlayControl extends AsyncTask <String, Void, String> {
         }
         return null;
     }
-    public PlayControl(String control){
+    public PlayControl(String control, Context context){
+
         this.control = control;
+        this.context = context;
     }
     public void sendCommand(String command) throws IOException {
         InputStream is = null;
+        int responseCode = 0;
         int len = 500;
 
         try {
@@ -41,6 +49,7 @@ public class PlayControl extends AsyncTask <String, Void, String> {
 
             conn.connect();
             is = conn.getInputStream();
+            responseCode = conn.getResponseCode();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (ProtocolException e) {
@@ -51,7 +60,15 @@ public class PlayControl extends AsyncTask <String, Void, String> {
             if (is != null) {
                 is.close();
                 System.out.println("closing the connection");
+                toastMessage = control + " Sent";
             }
         }
+    }
+    @Override
+    protected void onPostExecute(String s) {
+        Log.i("POST EXECUTE", "COMPLETE");
+        super.onPostExecute(s);
+        Toast.makeText(context, toastMessage,
+                Toast.LENGTH_LONG).show();
     }
 }

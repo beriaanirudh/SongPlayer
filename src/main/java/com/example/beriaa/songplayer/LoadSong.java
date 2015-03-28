@@ -16,7 +16,7 @@ import java.net.URLEncoder;
 /**
  * Created by beriaa on 12/1/14.
  */
-public class LoadSong extends AsyncTask<String, Void, String>{
+public class    LoadSong extends AsyncTask<String, Void, String>{
 
     public Activity activity;
     public TextView songURL;
@@ -40,7 +40,7 @@ public class LoadSong extends AsyncTask<String, Void, String>{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        /*getSongList gsList = new getSongList(songURL);
+        /*GetSongList gsList = new GetSongList(songURL);
         gsList.execute();
         */
         return null;
@@ -51,19 +51,22 @@ public class LoadSong extends AsyncTask<String, Void, String>{
         // Only display the first 500 characters of the retrieved
         // web page content.
         int len = 500;
+        int response = 0;
 
         try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             //conn.setReadTimeout(10000 /* milliseconds */);
+            //
             conn.setConnectTimeout(2000 /* milliseconds */);
             conn.setRequestMethod("GET");
             //conn.setDoInput(true);
             // Starts the query
             conn.connect();
-            //int response = conn.getResponseCode();
+
            // Log.d(DEBUG_TAG, "The response is: " + response);
-            is = conn.getInputStream();
+            //is = conn.getInputStream();
+            response = conn.getResponseCode();
 
             // Convert the InputStream into a string
             //String contentAsString = readIt(is, len);
@@ -75,12 +78,13 @@ public class LoadSong extends AsyncTask<String, Void, String>{
         }
         catch (Exception e) {
             toastMessage = "Error! Sorry, couldn't add...";
-            Log.e("LoadSong", e.toString());
-        } finally {
-            if (is != null) {
-                is.close();
-                System.out.println("cloding the connection");
-            }
+            //Log.e("LoadSong", e.printStackTrace());
+            e.printStackTrace();
+//        } finally {
+//            if (is != null) {
+//                is.close();
+//                System.out.println("closing the connection");
+//            }
 
         }
     }

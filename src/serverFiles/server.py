@@ -63,7 +63,9 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		global urlList
 		global play
 		global lock
+#s.send_header("AddSong", True)
 		s.send_response(200)
+		s.end_headers()
 		print s.path
 		print 'THE PATH IS \n\n',s.path, '\n\nENDS HERE'
 		dic = parseLink(s.path)
@@ -89,6 +91,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		elif 'playNext' in dic:
 		  	print 'playing next flow'
 		  	stopPlayer()
+	        ### Volume made for Mac right now. Need to anstract out for individual OSs.
 		elif 'volume' in dic:
 			currentVolume = int(os.popen("osascript -e 'set ovol to output volume of (get volume settings)'").read().split('\n')[0])
 			finalVolume = (float(currentVolume)) * 7 / 100

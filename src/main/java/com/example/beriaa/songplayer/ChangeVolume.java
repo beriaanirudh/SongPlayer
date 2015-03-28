@@ -2,6 +2,8 @@ package com.example.beriaa.songplayer;
 
 import android.os.AsyncTask;
 
+import com.example.beriaa.songplayer.config.Configurations;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -13,12 +15,12 @@ import java.net.URLEncoder;
  */
 public class ChangeVolume extends AsyncTask<String, Void, String> {
 
-
+    Configurations configs = new Configurations();
     String value;
     @Override
     protected String doInBackground(String... strings) {
         try {
-            downloadUrl("http://raspberrypi:8080/?volume="+value);
+            downloadUrl("http://" + configs.getIPAddress() + "/?volume="+value);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,7 +58,7 @@ public class ChangeVolume extends AsyncTask<String, Void, String> {
         } finally {
             if (is != null) {
                 is.close();
-                System.out.println("cloding the connection");
+                System.out.println("cloding the connection to " + configs.getIPAddress());
             }
         }
         return "success";

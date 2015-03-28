@@ -1,12 +1,26 @@
 package com.example.beriaa.songplayer;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.beriaa.songplayer.config.Configurations;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 
 public class MainActivity extends Activity {
 
@@ -18,8 +32,49 @@ public class MainActivity extends Activity {
         Intent intent = getIntent();
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
         TextView songURL = (TextView) findViewById(R.id.songURL);
-        //getSongList gsList = new getSongList(songURL);
+        String logMessage;
+        Configurations configs = new Configurations();
+        SharedPreferences prefs = this.getSharedPreferences(
+                configs.getAppKey(), Context.MODE_PRIVATE);
+        Editor edit = prefs.edit();
+        if (!prefs.contains(configs.getIPAddressKey())) {
+            edit.putString(configs.getIPAddressKey(),
+                    "192.168.1.118");
+            edit.commit();
+            Log.e("settingPrefs", "didn't contain, putting");
+        }
+        else {
+            Log.e("settingsPrefs", "contains already!" +
+                    prefs.getString(configs.getIPAddressKey(), ""));
+        }
+        configs.setIPAddress(prefs.getString(configs.getIPAddressKey(),"") +
+            configs.getPortNo());
+//        if ( == null) {
+//
+//        }
+        /*
+        String fileName = Configurations.getFileName();
+        File file = new File(Configurations.getDirectoryName());
+        if (!file.exists()) {
+            file.mkdir();
+
+            Log.e("file", file.toString());
+            try {
+                FileOutputStream fout = new FileOutputStream(new File(Configurations.getFileName()));
+                ObjectOutput oout = new ObjectOutputStream(fout);
+                oout.writeObject(new Configurations());
+                oout.close();
+                fout.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        */
+        //GetSongList gsList = new GetSongList(songURL);
         //gsList.execute();
+
+
         songURL.setText("welcome");
     }
 
@@ -46,25 +101,45 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
     public void nextSong(View view){
-        PlayControl playControl = new PlayControl("playNext");
+        PlayControl playControl = new PlayControl("playNext", getApplicationContext());
         playControl.execute();
     }
     public void playStop(View view) throws InterruptedException {
-        PlayControl playControl = new PlayControl("halt");
+        PlayControl playControl = new PlayControl("halt", getApplicationContext());
         playControl.execute();
     }
     public void refreshSongList(View view){
         System.out.println("Refreshing song list");
         TextView songURL = (TextView) findViewById(R.id.songURL);
-        getSongList gsList = new getSongList(songURL);
+        GetSongList gsList = new GetSongList(songURL, getApplicationContext()   );
         gsList.execute();
     }
-    public void volumeUp(View view){
-        ChangeVolume changeVolume = new ChangeVolume("1");
-        changeVolume.execute();
+//
+//    public void volumeUp(View view){
+//        ChangeVolume changeVolume = new ChangeVolume("1");
+//        changeVolume.execute();
+//    }
+//    public void volumeDown(View view){
+//        ChangeVolume changeVolume = new ChangeVolume("0");
+//        changeVolume.execute();
+//    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)){
+            ChangeVolume changeVolume = new ChangeVolume("0");
+            changeVolume.execute();
+            //Do something
+        }
+        return true;
     }
-    public void volumeDown(View view){
-        ChangeVolume changeVolume = new ChangeVolume("0");
-        changeVolume.execute();
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)){
+            ChangeVolume changeVolume = new ChangeVolume("1");
+            changeVolume.execute();
+            //Do something
+        }
+        return true;
     }
 }
