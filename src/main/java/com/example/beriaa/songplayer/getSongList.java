@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.beriaa.songplayer.config.Configurations;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,10 +24,12 @@ public class GetSongList extends AsyncTask<String, Void, String> {
     String retString = "";
     boolean refreshFlag = false;
     Context context;
+    Configurations configs = new Configurations();
     @Override
     protected String doInBackground(String... strings) {
         try {
-            downloadUrl("http://192.168.1.118:8080/?getList=True");
+            downloadUrl("http://" + configs.getIPAddress() +
+                    configs.getPortNo() + "/?getList=True");
         } catch (IOException e) {
             e.printStackTrace();
         }

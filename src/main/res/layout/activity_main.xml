@@ -12,6 +12,13 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <ListView android:text="@string/hello_world" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@android:id/list"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

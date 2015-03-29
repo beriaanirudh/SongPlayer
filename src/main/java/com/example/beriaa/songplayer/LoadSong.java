@@ -7,6 +7,8 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.beriaa.songplayer.config.Configurations;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -22,6 +24,7 @@ public class    LoadSong extends AsyncTask<String, Void, String>{
     public TextView songURL;
     Context context;
     public String toastMessage = "Song Added!";
+    Configurations configs = new Configurations();
     public LoadSong(TextView songURL, Context context){
 
         this.songURL = songURL;
@@ -35,7 +38,8 @@ public class    LoadSong extends AsyncTask<String, Void, String>{
             System.out.println(strings[0]);
             //System.out.println(strings[1]);
             //downloadUrl("http://192.168.1.142:8080/?link="+strings[0]+"&name=myname");
-            downloadUrl("http://192.168.1.118:8080/?link="+strings[0] + "&name=" + URLEncoder.encode(strings[1]));
+            downloadUrl("http://" + configs.getIPAddress() +
+                    configs.getPortNo() +"/?link="+strings[0] + "&name=" + URLEncoder.encode(strings[1]));
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -20,7 +20,8 @@ public class ChangeVolume extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... strings) {
         try {
-            downloadUrl("http://" + configs.getIPAddress() + "/?volume="+value);
+            downloadUrl("http://" + configs.getIPAddress() +
+                    configs.getPortNo() + "/?volume="+value);
         } catch (IOException e) {
             e.printStackTrace();
         }

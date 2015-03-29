@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.beriaa.songplayer.config.Configurations;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,10 +23,12 @@ public class PlayControl extends AsyncTask <String, Void, String> {
     String control = "";
     public String toastMessage = "Can't reach server...";
     Context context;
+    Configurations configs = new Configurations();
     @Override
     protected String doInBackground(String... strings) {
         try {
-            sendCommand("http://192.168.1.118:8080/?" + this.control + "=True");
+            sendCommand("http://"+ configs.getIPAddress() +
+                    configs.getPortNo() +"/?" + this.control + "=True");
         } catch (IOException e) {
             e.printStackTrace();
         }

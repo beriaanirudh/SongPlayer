@@ -31,7 +31,7 @@ public class Configurations {
     public String getIPAddressKey() {
         return IPAddressKey;
     }
-    private final static String appKey = "com.example.beriaa.songplayer";
+    private final static String appKey = "com.example.beriaa.songplayer_preferences";
 
     public String getAppKey() {
         return appKey;

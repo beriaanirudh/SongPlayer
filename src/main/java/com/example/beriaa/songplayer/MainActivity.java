@@ -15,14 +15,7 @@ import android.widget.TextView;
 
 import com.example.beriaa.songplayer.config.Configurations;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-
-public class MainActivity extends Activity {
+public class MainActivity extends Activity{
 
 
     @Override
@@ -38,9 +31,10 @@ public class MainActivity extends Activity {
                 configs.getAppKey(), Context.MODE_PRIVATE);
         Editor edit = prefs.edit();
         if (!prefs.contains(configs.getIPAddressKey())) {
-            edit.putString(configs.getIPAddressKey(),
-                    "192.168.1.118");
-            edit.commit();
+            //edit.putString(configs.getIPAddressKey(),
+            //        "192.168.1.118");
+            //edit.commit();
+            takeInputIP();
             Log.e("settingPrefs", "didn't contain, putting");
         }
         else {
@@ -86,20 +80,6 @@ public class MainActivity extends Activity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     public void nextSong(View view){
         PlayControl playControl = new PlayControl("playNext", getApplicationContext());
         playControl.execute();
@@ -141,5 +121,25 @@ public class MainActivity extends Activity {
             //Do something
         }
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.IPAddress:
+                takeInputIP();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    public void takeInputIP() {
+//        getFragmentManager().beginTransaction()
+//                .replace(android.R.id.content, new SettingsFragment())
+//                .commit();
+       // SettingsActivity setAct = new SettingsActivity();
+        startActivity(new Intent(this, SettingsActivity.class));
+
     }
 }
