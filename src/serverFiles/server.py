@@ -63,9 +63,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		global urlList
 		global play
 		global lock
-#s.send_header("AddSong", True)
 		s.send_response(200)
-		s.end_headers()
 		print s.path
 		print 'THE PATH IS \n\n',s.path, '\n\nENDS HERE'
 		dic = parseLink(s.path)
@@ -80,6 +78,8 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 				play = True
 				callPlaySong()
 			lock.release()
+			s.send_header("Content-type", "text/html")
+			s.end_headers()
 		elif 'getList' in dic:
 			print 'sending list of urls'
 			s.send_header("Content-type", "text/html")
@@ -91,7 +91,8 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 		elif 'playNext' in dic:
 		  	print 'playing next flow'
 		  	stopPlayer()
-	        ### Volume made for Mac right now. Need to anstract out for individual OSs.
+			s.send_header("Content-type", "text/html")
+			s.end_headers()
 		elif 'volume' in dic:
 			currentVolume = int(os.popen("osascript -e 'set ovol to output volume of (get volume settings)'").read().split('\n')[0])
 			finalVolume = (float(currentVolume)) * 7 / 100
@@ -101,6 +102,8 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 			elif dic['volume'][0] == '0' and currentVolume > 0 :
 			 	finalVolume -= 0.5
 			os.system('osascript -e "set volume %f"' % finalVolume)
+			s.send_header("Content-type", "text/html")
+			s.end_headers()
 			print 'volume to %f"' % finalVolume
 		else :
 			print 'else loop'
@@ -110,6 +113,8 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 				play = True
 				callPlaySong()
 			lock.release()
+			s.send_header("Content-type", "text/html")
+			s.end_headers()
 		print 'MAIN THREAD FREE'
 			
 
