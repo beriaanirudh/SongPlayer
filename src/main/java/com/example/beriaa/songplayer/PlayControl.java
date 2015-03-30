@@ -28,7 +28,7 @@ public class PlayControl extends AsyncTask <String, Void, String> {
     protected String doInBackground(String... strings) {
         try {
             sendCommand("http://"+ configs.getIPAddress() +
-                    configs.getPortNo() +"/?" + this.control + "=True");
+                    "/?" + this.control + "=True");
         } catch (IOException e) {
             e.printStackTrace();
         }

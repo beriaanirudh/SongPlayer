@@ -38,8 +38,8 @@ public class    LoadSong extends AsyncTask<String, Void, String>{
             System.out.println(strings[0]);
             //System.out.println(strings[1]);
             //downloadUrl("http://192.168.1.142:8080/?link="+strings[0]+"&name=myname");
-            downloadUrl("http://" + configs.getIPAddress() +
-                    configs.getPortNo() +"/?link="+strings[0] + "&name=" + URLEncoder.encode(strings[1]));
+            downloadUrl("http://" + configs.getIPAddress()
+                    +"/?link="+strings[0] + "&name=" + URLEncoder.encode(strings[1]));
 
         } catch (IOException e) {
             e.printStackTrace();

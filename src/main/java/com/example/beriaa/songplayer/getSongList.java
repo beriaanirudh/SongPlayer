@@ -28,8 +28,7 @@ public class GetSongList extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... strings) {
         try {
-            downloadUrl("http://" + configs.getIPAddress() +
-                    configs.getPortNo() + "/?getList=True");
+            downloadUrl("http://" + configs.getIPAddress() + "/?getList=True");
         } catch (IOException e) {
             e.printStackTrace();
         }

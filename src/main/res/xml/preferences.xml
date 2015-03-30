@@ -3,5 +3,5 @@
     <EditTextPreference
         android:key="com.example.beriaa.songplayer.IPAddress"
         android:title="Enter Server Address"
-        android:defaultValue="192.168.1.118" />
+        android:defaultValue="192." />
 </PreferenceScreen>

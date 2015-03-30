@@ -1,5 +1,6 @@
 package com.example.beriaa.songplayer;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -13,6 +14,7 @@ import com.example.beriaa.songplayer.config.Configurations;
  */
 public class SettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener{
+    Configurations configs = new Configurations();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +26,8 @@ public class SettingsFragment extends PreferenceFragment
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         Configurations configs = new Configurations();
-        configs.setIPAddress(sharedPreferences.getString(s,""));
+        configs.setIPAddress(sharedPreferences.getString(s,"") +
+            configs.getPortNo());
         //sharedPreferences.edit().putString()
         Log.e("changinPref", configs.getIPAddress());
 
